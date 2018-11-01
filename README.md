@@ -3,9 +3,9 @@
 
 Model–view–controller architectural pattern in JAVA WEB
 
-Model: DAO -> DBContect -> Entity -> Attribute
-View: JSP
-Controller: Servlet
+Model: DAO -> DBContect -> Entity -> Attribute <br>
+View: JSP <br>
+Controller: Servlet <br>
 
 When a request is sent to server:
 1. Controller revices request
