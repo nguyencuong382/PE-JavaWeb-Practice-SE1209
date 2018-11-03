@@ -20,6 +20,25 @@ import java.util.List;
  */
 public class UserDAO {
 
+    public User_ getUserByName(String userName) throws Exception {
+        User_ user = null;
+        Connection conn = new DBContext().getConnection();
+        String query = "select * from Users where username = '"+userName+"'";
+        ResultSet resultSet = conn
+                .prepareStatement(query)
+                .executeQuery();
+        if (resultSet.next()) {
+            String userName_ = resultSet.getString("username");
+            String passWord_ = resultSet.getString("password");
+            
+            user = new User_(userName_, passWord_);
+            
+        }
+        resultSet.close();
+        conn.close();
+        return user;
+    }
+
     public User_ list(String userName, String passWord) throws Exception {
         User_ user = null;
 
@@ -28,7 +47,7 @@ public class UserDAO {
         ResultSet resultSet = conn
                 .prepareStatement(query)
                 .executeQuery();
-        while (resultSet.next()) {
+        if (resultSet.next()) {
             String userName_ = resultSet.getString("username");
             String passWord_ = resultSet.getString("password");
             System.out.println(userName_);
@@ -57,7 +76,7 @@ public class UserDAO {
             String passWord_ = resultSet.getString("password");
             users.add(new User_(userName_, passWord_));
         }
-        
+
         resultSet.close();
         conn.close();
         return users;

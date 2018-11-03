@@ -19,6 +19,32 @@ import java.util.List;
  */
 public class RoleDAO {
 
+    public List<Role> getRemainRole(String userName) throws Exception {
+        List<Role> roles;
+        try (Connection conn = new DBContext().getConnection()) {
+            roles = new ArrayList<>();
+            String query = "select * from Roles O except (select R.* from Users U\n"
+                    + "	inner join Role_User RU on RU.username = U.username\n"
+                    + "	inner join Roles R on R.roleid = RU.roleid\n"
+                    + "where U.username = '"+userName+"')";
+
+            PreparedStatement ps = conn
+                    .prepareStatement(query);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("roleid");
+                String roleName = resultSet.getString("rolename");
+                roles.add(new Role(id, roleName));
+            }
+            ps.close();
+            conn.close();
+        }
+        
+
+        return roles;
+
+    }
+
     public List<Role> list(String userName) throws Exception {
         List<Role> roles;
         try (Connection conn = new DBContext().getConnection()) {
