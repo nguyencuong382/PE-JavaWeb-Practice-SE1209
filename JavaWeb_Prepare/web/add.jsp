@@ -13,13 +13,53 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <p>Select User</p>
+
         <form action="/JavaWeb_Prepare/UserRole/Add" method="POST">
-            <select name="userName" id="" onchange="this.form.submit()">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-            </select>
+            <p>Select User
+                <select name="userName" id="" onchange="this.form.submit()">
+                    <c:forEach var="user" items="${users}">
+                        <option value="${user.userName}" ${user.userName == param.userName ? 'selected' : ''}>${user.userName}</option>
+                    </c:forEach>
+                </select>
+            </p>
+
+            <p>Select available role
+                <select name="roleId">
+                    <c:forEach var="role" items="${rolesAvailable}">
+                        <option value="${role.roleId}">${role.roleName}</option>
+                    </c:forEach>
+                </select>
+            </p>
+            
+            <input type="submit" value="Save" name="save">
         </form>
+
+
+
+        <table border="1" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Role ID</th>
+                    <th>Role Name</th>
+                    <th>Features</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="role" items="${rolesAdded}">
+                    <tr>
+                        <td>${role.roleId}</td>
+                        <td>${role.roleName}</td>
+                        <td>
+                            <ul>
+                                <c:forEach var="feature" items="${role.features}">
+                                    <li>${feature.url}</li>
+                                    </c:forEach>
+                            </ul>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+
     </body>
 </html>

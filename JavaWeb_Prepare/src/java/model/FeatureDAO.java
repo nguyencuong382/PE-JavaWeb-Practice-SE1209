@@ -32,8 +32,8 @@ public class FeatureDAO {
                     .prepareStatement(query);
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                int featureId = resultSet.getInt("[featureid]");
-                String url = resultSet.getString("[url]");
+                int featureId = resultSet.getInt("featureid");
+                String url = resultSet.getString("url");
                 
                 Feature f = new Feature(featureId, url);
                 features.add(f);

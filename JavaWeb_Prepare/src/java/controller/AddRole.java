@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.RoleDAO;
+import model.RoleUserDAO;
 import model.UserDAO;
 
 /**
@@ -36,27 +37,35 @@ public class AddRole extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        RequestDispatcher rd = request.getRequestDispatcher("/add.jsp");
 
         try {
-            RequestDispatcher rd = request.getRequestDispatcher("/add.jsp");
             String userName = request.getParameter("userName");
             String roleId = request.getParameter("roleId");
-            
-            if(userName == null) {
+            String save = request.getParameter("save");
+
+            System.out.println("savce" + save);
+
+            if (userName == null) {
                 userName = "mra";
             }
-            
-            if (roleId == null) {
-                List<User_> users = new UserDAO().listAll();
-                List<Role> roles = new RoleDAO().getRemainRole(userName);
-                request.setAttribute("users", users);
-                request.setAttribute("roles", roles);
-                rd.forward(request, response);
+
+            if (save != null) {
+                new RoleUserDAO().insertRoleUser(Integer.parseInt(roleId), userName);
             }
+            
+            List<User_> users = new UserDAO().listAll();
+            List<Role> rolesAvailable = new RoleDAO().getRemainRoles(userName);
+            List<Role> rolesAdded = new RoleDAO().getAddedRoles(userName);
+            request.setAttribute("users", users);
+            request.setAttribute("rolesAvailable", rolesAvailable);
+            request.setAttribute("rolesAdded", rolesAdded);
 
         } catch (Exception e) {
-
+            System.out.println(e);
         }
+
+        rd.forward(request, response);
 
     }
 

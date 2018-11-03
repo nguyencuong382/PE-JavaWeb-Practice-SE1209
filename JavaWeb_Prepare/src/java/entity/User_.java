@@ -37,10 +37,8 @@ public class User_ {
     }
     
     
-    
-    
     public List<Role> getRoles() throws Exception {
-        return new RoleDAO().list(userName);
+        return new RoleDAO().getAddedRoles(userName);
     }
     
 }

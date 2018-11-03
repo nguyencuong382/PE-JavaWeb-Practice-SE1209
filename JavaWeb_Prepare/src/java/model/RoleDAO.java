@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class RoleDAO {
 
-    public List<Role> getRemainRole(String userName) throws Exception {
+    public List<Role> getRemainRoles(String userName) throws Exception {
         List<Role> roles;
         try (Connection conn = new DBContext().getConnection()) {
             roles = new ArrayList<>();
@@ -45,7 +45,7 @@ public class RoleDAO {
 
     }
 
-    public List<Role> list(String userName) throws Exception {
+    public List<Role> getAddedRoles(String userName) throws Exception {
         List<Role> roles;
         try (Connection conn = new DBContext().getConnection()) {
             roles = new ArrayList<>();

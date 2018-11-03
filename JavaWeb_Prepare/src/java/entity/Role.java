@@ -41,6 +41,6 @@ public class Role {
     }
     
     public List<Feature> getFeatures() throws Exception {
-        return new FeatureDAO().list(roleId);
+        return new FeatureDAO().getAllFeaturesByRoleId(roleId);
     }
 }

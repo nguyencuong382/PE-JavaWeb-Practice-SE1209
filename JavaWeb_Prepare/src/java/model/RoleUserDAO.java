@@ -21,7 +21,7 @@ public class RoleUserDAO {
                 + "           ,[username])\n"
                 + "     VALUES\n"
                 + "           (" + roleId + "\n"
-                + "           ," + userName + ")";
+                + "           ,'" + userName + "')";
 
         Connection conn = new DBContext().getConnection();
         PreparedStatement ps = conn
