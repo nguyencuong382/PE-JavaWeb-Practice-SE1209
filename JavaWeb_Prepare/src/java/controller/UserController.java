@@ -28,15 +28,18 @@ public class UserController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        List<User_> users= null;
+        List<User_> users = null;
+        User_ currentUser = null;
         try {
-            users  = new UserDAO().listAll();
+            users = new UserDAO().getAllUsers();
+            currentUser = (User_) request.getSession().getAttribute("user");
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        
+
         RequestDispatcher rd = request.getRequestDispatcher("/list.jsp");
         request.setAttribute("users", users);
+        request.setAttribute("currentUser", currentUser);
         rd.forward(request, response);
     }
 

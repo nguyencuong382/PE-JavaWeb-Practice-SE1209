@@ -23,7 +23,7 @@ import model.UserDAO;
  *
  * @author Admin
  */
-public class AddRole extends HttpServlet {
+public class EditController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,23 +37,30 @@ public class AddRole extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        RequestDispatcher rd = request.getRequestDispatcher("/add.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/edit.jsp");
 
         try {
             String userName = request.getParameter("userName");
-            String roleId = request.getParameter("roleId");
+            String oldRoleId = request.getParameter("oldRoleId");
+            String newRoleId = request.getParameter("newRoleId");
             String save = request.getParameter("save");
+            String delete = request.getParameter("delete");
 
-            System.out.println("savce" + save);
+            if (userName != null) {
+                RoleUserDAO roleUserDAO =new RoleUserDAO();
+                
+                if (delete != null) {
+                    roleUserDAO.deleteRoleUser(Integer.parseInt(oldRoleId), userName);
+                }
 
-            if (userName == null) {
+                if (save != null) {
+                    boolean updated = new RoleUserDAO().updateRoleUser(userName, Integer.parseInt(oldRoleId), Integer.parseInt(newRoleId));
+                }
+                
+            } else {
                 userName = "mra";
             }
 
-            if (save != null) {
-                new RoleUserDAO().insertRoleUser(Integer.parseInt(roleId), userName);
-            }
-            
             List<User_> users = new UserDAO().getAllUsers();
             List<Role> rolesAvailable = new RoleDAO().getRemainRoles(userName);
             List<Role> rolesAdded = new RoleDAO().getAddedRoles(userName);
@@ -66,7 +73,6 @@ public class AddRole extends HttpServlet {
         }
 
         rd.forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -5,25 +5,19 @@
  */
 package controller;
 
-import entity.Role;
-import entity.User_;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.RoleDAO;
-import model.RoleUserDAO;
-import model.UserDAO;
 
 /**
  *
  * @author Admin
  */
-public class AddRole extends HttpServlet {
+public class HomeController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,36 +31,9 @@ public class AddRole extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        RequestDispatcher rd = request.getRequestDispatcher("/add.jsp");
-
-        try {
-            String userName = request.getParameter("userName");
-            String roleId = request.getParameter("roleId");
-            String save = request.getParameter("save");
-
-            System.out.println("savce" + save);
-
-            if (userName == null) {
-                userName = "mra";
-            }
-
-            if (save != null) {
-                new RoleUserDAO().insertRoleUser(Integer.parseInt(roleId), userName);
-            }
-            
-            List<User_> users = new UserDAO().getAllUsers();
-            List<Role> rolesAvailable = new RoleDAO().getRemainRoles(userName);
-            List<Role> rolesAdded = new RoleDAO().getAddedRoles(userName);
-            request.setAttribute("users", users);
-            request.setAttribute("rolesAvailable", rolesAvailable);
-            request.setAttribute("rolesAdded", rolesAdded);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
+        System.out.println("aaaa");
+        RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
         rd.forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

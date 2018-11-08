@@ -14,7 +14,7 @@
     </head>
     <body>
 
-        <form action="/JavaWeb_Prepare/UserRole/Add" method="POST">
+        <form action="${pageContext.request.contextPath}/insert" method="POST">
             <p>Select User
                 <select name="userName" id="" onchange="this.form.submit()">
                     <c:forEach var="user" items="${users}">

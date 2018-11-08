@@ -15,10 +15,10 @@ import java.sql.PreparedStatement;
  */
 public class RoleUserDAO {
 
-    public void insertRoleUser(int roleId, String userName) throws Exception {
-        String query = "INSERT INTO [PRJ321_Fall2018].[dbo].[Role_User]\n"
-                + "           ([roleid]\n"
-                + "           ,[username])\n"
+    public boolean insertRoleUser(int roleId, String userName) throws Exception {
+        String query = "INSERT INTO Role_User\n"
+                + "           (roleid\n"
+                + "           ,username)\n"
                 + "     VALUES\n"
                 + "           (" + roleId + "\n"
                 + "           ,'" + userName + "')";
@@ -30,5 +30,39 @@ public class RoleUserDAO {
         int n = ps.executeUpdate();
         ps.close();
         conn.close();
+
+        return n > 0;
     }
+
+    public boolean deleteRoleUser(int roleId, String userName) throws Exception {
+        String query = "DELETE FROM Role_User\n"
+                + "WHERE roleid = " + roleId + " and username= '" + userName + "'";
+
+        Connection conn = new DBContext().getConnection();
+        PreparedStatement ps = conn
+                .prepareStatement(query);
+
+        int n = ps.executeUpdate();
+        ps.close();
+        conn.close();
+
+        return n > 0;
+    }
+
+    public boolean updateRoleUser(String userName, int oldRoleId, int newRoleId) throws Exception {
+        String query = "UPDATE Role_User\n"
+                + "   SET roleid = "+newRoleId+"\n"
+                + "WHERE roleid = "+oldRoleId+" and username= '"+userName+"'";
+
+        Connection conn = new DBContext().getConnection();
+        PreparedStatement ps = conn
+                .prepareStatement(query);
+
+        int n = ps.executeUpdate();
+        ps.close();
+        conn.close();
+
+        return n > 0;
+    }
+
 }

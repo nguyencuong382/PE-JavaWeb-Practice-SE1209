@@ -19,54 +19,43 @@ import java.util.List;
  */
 public class RoleDAO {
 
-    public List<Role> getRemainRoles(String userName) throws Exception {
-        List<Role> roles;
-        try (Connection conn = new DBContext().getConnection()) {
-            roles = new ArrayList<>();
-            String query = "select * from Roles O except (select R.* from Users U\n"
-                    + "	inner join Role_User RU on RU.username = U.username\n"
-                    + "	inner join Roles R on R.roleid = RU.roleid\n"
-                    + "where U.username = '"+userName+"')";
+    public List<Role> list(String query) throws Exception {
+        List<Role> roles = new ArrayList<>();
+        Connection conn = new DBContext().getConnection();
+        PreparedStatement ps = conn
+                .prepareStatement(query);
+        ResultSet resultSet = ps.executeQuery();
 
-            PreparedStatement ps = conn
-                    .prepareStatement(query);
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("roleid");
-                String roleName = resultSet.getString("rolename");
-                roles.add(new Role(id, roleName));
-            }
-            ps.close();
-            conn.close();
+        while (resultSet.next()) {
+            Role r = new Role();
+            r.setRoleId(resultSet.getInt("roleid"));
+            r.setRoleName(resultSet.getString("rolename"));
+            roles.add(r);
         }
-        
 
+        resultSet.close();
+        conn.close();
         return roles;
+    }
 
+    public List<Role> getAllRoles() throws Exception {
+        String query = "select * from Roles";
+        return list(query);
+    }
+
+    public List<Role> getRemainRoles(String userName) throws Exception {
+        String query = "select * from Roles\n"
+                + "except\n"
+                + "(select R.* from Role_User RU\n"
+                + "inner join Roles R on RU.roleid = R.roleid\n"
+                + "where RU.username = '" + userName + "')";
+        return list(query);
     }
 
     public List<Role> getAddedRoles(String userName) throws Exception {
-        List<Role> roles;
-        try (Connection conn = new DBContext().getConnection()) {
-            roles = new ArrayList<>();
-            String query = "select * from Users U\n"
-                    + "inner join Role_User RU on RU.username = U.username\n"
-                    + "inner join Roles RO on RO.roleid = RU.roleid\n"
-                    + "where U.username = ?";
-
-            PreparedStatement ps = conn
-                    .prepareStatement(query);
-            ps.setString(1, userName);
-            ResultSet resultSet = ps.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("roleid");
-                String roleName = resultSet.getString("rolename");
-                roles.add(new Role(id, roleName));
-            }
-        }
-
-        return roles;
+        String query = "select R.* from Role_User RU\n"
+                + "inner join Roles R on RU.roleid = R.roleid\n"
+                + "where RU.username = '" + userName + "'";
+        return list(query);
     }
-
 }
