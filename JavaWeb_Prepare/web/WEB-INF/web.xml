@@ -8,13 +8,21 @@
         <filter-name>ListUserFilter</filter-name>
         <filter-class>filter.ListUserFilter</filter-class>
     </filter>
-    <filter-mapping>
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>filter.AuthenticationFilter</filter-class>
+    </filter>
+<!--    <filter-mapping>
         <filter-name>AllFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>ListUserFilter</filter-name>
         <url-pattern>/list/*</url-pattern>
+    </filter-mapping>-->
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/authen/*</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>UserController</servlet-name>

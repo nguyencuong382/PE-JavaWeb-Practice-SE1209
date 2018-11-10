@@ -25,6 +25,10 @@
         <a href="${pageContext.request.contextPath}/index.jsp">Home</a>
         <a href="${pageContext.request.contextPath}/list">List</a>
         
+        <a href="${pageContext.request.contextPath}/authen/AdminPage.jsp">Admin</a>
+        
+        <a href="${pageContext.request.contextPath}/authen/UserPage.jsp">User</a>
+        
         <c:if test="${empty sessionScope.user}">
             <a href="${pageContext.request.contextPath}/login">Login</a>
         </c:if>

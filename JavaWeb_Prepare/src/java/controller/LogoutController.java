@@ -7,6 +7,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -33,8 +34,16 @@ public class LogoutController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession httpSession = request.getSession();
-        httpSession.removeAttribute("user");
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        
+        Enumeration<String> attrs = httpSession.getAttributeNames();
+        while (attrs.hasMoreElements()) {
+            String attrName = attrs.nextElement();
+            System.out.println(attrName);
+            httpSession.removeAttribute(attrName);
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/login");
+//        response.sendRedirect(request.getContextPath() + "/index.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

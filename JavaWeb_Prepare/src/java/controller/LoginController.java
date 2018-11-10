@@ -40,19 +40,27 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("password");
         RequestDispatcher rd;
         if (userName != null && password != null) {
-            
+
             try {
                 User_ u = new UserDAO().getUser(userName, password);
-                System.out.println(u);
+
                 if (u == null) {
+                    request.getSession().setAttribute("error", "Invalid username and password, please retry");
                     rd = request.getRequestDispatcher("/login.jsp");
                     rd.forward(request, response);
                 } else {
+                    request.getSession().removeAttribute("error");
                     HttpSession session = request.getSession();
                     session.setAttribute("user", u);
-                    response.sendRedirect(request.getContextPath() + "/home");
+
+                    if (u.isAdmin()) {
+                        response.sendRedirect(request.getContextPath() + "/authen/AdminPage.jsp");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/authen/UserPage.jsp");
+                    }
                 }
             } catch (Exception ex) {
+                request.getSession().setAttribute("error", "Invalid username and password, please retry");
                 rd = request.getRequestDispatcher("/login.jsp");
                 rd.forward(request, response);
             }
@@ -61,8 +69,6 @@ public class LoginController extends HttpServlet {
             rd = request.getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
         }
-
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
